@@ -242,14 +242,17 @@
                     })
                     .filter(p => p.nome && p.ean);
                 
-                // Popula select
+                // Popula select - ignora a primeira linha (header "NOME DO PRODUTO")
                 const select = document.getElementById('produto');
                 select.innerHTML = '<option value="">-- Selecione um produto --</option>';
                 produtosData.forEach((p, idx) => {
-                    const option = document.createElement('option');
-                    option.value = idx;
-                    option.textContent = p.nome;
-                    select.appendChild(option);
+                    // Pula se for o header
+                    if (p.nome && p.nome.toUpperCase() !== 'NOME DO PRODUTO') {
+                        const option = document.createElement('option');
+                        option.value = idx;
+                        option.textContent = p.nome;
+                        select.appendChild(option);
+                    }
                 });
                 
                 const optionNovo = document.createElement('option');
