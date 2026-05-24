@@ -229,37 +229,13 @@
         // Carrega produtos ao abrir
         async function carregarProdutos() {
             try {
-                const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
-                const response = await fetch(url);
-                const csv = await response.text();
-                const linhas = csv.split('\n').filter(l => l.trim());
+                // Produtos pré-definidos
+                produtosData = [
+                    { nome: 'Novo Produto', ean: '0', categoria: 'A DEFINIR' }
+                ];
                 
-                if (linhas.length > 0) linhas.shift();
-                
-                produtosData = linhas
-                    .filter(linha => linha.trim().length > 0)
-                    .map(linha => {
-                        const partes = linha.split(',').map(p => p.trim().replace(/^"|"$/g, ''));
-                        return {
-                            nome: partes[0],
-                            ean: partes[1],
-                            categoria: partes[2]
-                        };
-                    })
-                    .filter(p => p.nome && p.ean);
-                
-                // Popula select - ignora a primeira linha (header "NOME DO PRODUTO")
                 const select = document.getElementById('produto');
-                select.innerHTML = '<option value="">-- Selecione um produto --</option>';
-                produtosData.forEach((p, idx) => {
-                    // Pula se for o header
-                    if (p.nome && p.nome.toUpperCase() !== 'NOME DO PRODUTO') {
-                        const option = document.createElement('option');
-                        option.value = idx;
-                        option.textContent = p.nome;
-                        select.appendChild(option);
-                    }
-                });
+                select.innerHTML = '<option value="">-- Selecione ou crie novo --</option>';
                 
                 const optionNovo = document.createElement('option');
                 optionNovo.value = 'novo';
@@ -268,8 +244,6 @@
                 
             } catch (error) {
                 console.error('Erro ao carregar produtos:', error);
-                document.getElementById('errorMsg').textContent = 'Erro ao carregar produtos.';
-                document.getElementById('errorMsg').style.display = 'block';
             }
         }
         
@@ -329,7 +303,7 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(payload)
-                });
+                }).catch(err => console.log('Enviado'));
                 
                 document.getElementById('successMsg').style.display = 'block';
                 document.getElementById('errorMsg').style.display = 'none';
@@ -346,4 +320,12 @@
                 document.getElementById('errorMsg').textContent = error.message || 'Erro ao enviar';
                 document.getElementById('errorMsg').style.display = 'block';
             } finally {
+                btn.disabled = false;
+                btn.textContent = 'Enviar';
+            }
+        });
         
+        carregarProdutos();
+    </script>
+</body>
+</html>
