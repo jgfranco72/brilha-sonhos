@@ -310,6 +310,8 @@
                 const [ano, mes, dia] = data.split('-');
                 const dataFormatada = `${dia}/${mes}`;
                 
+                const formURL = 'https://script.google.com/macros/s/AKfycbxwdw8bQpqMI-_p64nTebra8RQwczStABmTKS5mk9r1YMmQWdyyeFsgeUv4ospqJkFg9Q/exec';
+                
                 // Envia para Apps Script
                 const payload = {
                     data: data,
@@ -344,12 +346,4 @@
                 document.getElementById('errorMsg').textContent = error.message || 'Erro ao enviar';
                 document.getElementById('errorMsg').style.display = 'block';
             } finally {
-                btn.disabled = false;
-                btn.textContent = 'Enviar';
-            }
-        });
         
-        carregarProdutos();
-    </script>
-</body>
-</html>
