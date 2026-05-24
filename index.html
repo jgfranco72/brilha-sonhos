@@ -310,23 +310,23 @@
                 const [ano, mes, dia] = data.split('-');
                 const dataFormatada = `${dia}/${mes}`;
                 
-                // Envia para Google Form
-                const formData = new FormData();
-                formData.append('entry.545630620_month', mes);
-                formData.append('entry.545630620_day', dia);
-                formData.append('entry.1505989201', nomeProduto);
-                formData.append('entry.81535401', ean);
-                formData.append('entry.1004810745', categoria);
-                formData.append('entry.1302349164', quantidade);
-                formData.append('entry.2094393619', parseFloat(preco).toFixed(2));
-                formData.append('entry.745068485', fornecedor);
-                
-                const formURL = 'https://docs.google.com/forms/d/e/1FAIpQLSeRWzrpUSUe__LSiI6yoP_6tt5OKwFg8xLMdXylC90UyGrZsA/formResponse';
+                // Envia para Apps Script
+                const payload = {
+                    data: data,
+                    produto: nomeProduto,
+                    ean: ean,
+                    categoria: categoria,
+                    quantidade: quantidade,
+                    preco: parseFloat(preco).toFixed(2),
+                    fornecedor: fornecedor
+                };
                 
                 await fetch(formURL, {
                     method: 'POST',
-                    body: formData,
-                    mode: 'no-cors'
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
                 });
                 
                 document.getElementById('successMsg').style.display = 'block';
